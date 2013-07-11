@@ -1,2 +1,5 @@
+*.o
+corpus
+param
 bin
 Makefile.app

@@ -107,6 +107,7 @@ int AppMain(int argc, char* argv[])
 	lemur::api::Index *ind;//conversion of external/internal docids, unidgramdoccounter
 	indri::api::QueryEnvironment env;//Indri again
 
+	std::cerr<<"Opening index structures"<<std::endl;
 	try
 	{
 		repository.openRead(RetrievalParameter::databaseIndex);
@@ -182,7 +183,7 @@ int AppMain(int argc, char* argv[])
 	ps->trainingSet = trainingSet;
 
 	//the TermDistributionFilter is implemented as a singleton; first call initializes the necessary parameters
-	lemur::extra::TermDistributionFilter::getInstance();
+	lemur::extra::TermDistributionFilter *tdf = lemur::extra::TermDistributionFilter::getInstance();
 
 	//create the tree consisting of GeoNode elements
 	std::cerr<<"Generating hierarchical region splits"<<std::endl;
@@ -208,7 +209,7 @@ int AppMain(int argc, char* argv[])
 	rootNode->fillSetWithNodesAtLevel(higherLevelNodes,
 			ps->higherLevel);
 
-	std::cerr<<"Number of higher level leaves: "<<higherLevelNodes->size()<<std::endl;
+	std::cerr<<"Number of higher level nodes: "<<higherLevelNodes->size()<<std::endl;
 
 
 	//read the prior file and convert it to prior probabilities (uniform prob. over all leaves otherwise)
@@ -291,13 +292,11 @@ int AppMain(int argc, char* argv[])
 		}
 		else
 		{
-			std::cerr<<"++++++"<<std::endl;
+			std::cerr<<"++++++ TAGS ++++++"<<std::endl;
 			std::cerr<<"number of terms: "<<numTerms<<std::endl;
 			std::map<int,int> *terms = gd.getTerms("tags");
 			for(std::map<int,int>::iterator it = terms->begin(); it!=terms->end(); it++)
-			{
 				std::cerr<<"\t"<<ind->term(it->first)<<std::endl;
-			}
 			std::cerr<<"++++++"<<std::endl;
 		}
 
@@ -311,17 +310,29 @@ int AppMain(int argc, char* argv[])
 			double maxLikelihood = -1 * DBL_MAX;
 			GeoNode *maxNode = NULL;//store the best fitting node here
 
-			std::set<GeoNode*> *nodes = (j == 0) ? higherLevelNodes : localLeaves;
+			std::set<GeoNode*> *nodes = ((j == 0) ? higherLevelNodes : localLeaves);
+
+			if(nodes->size()<=0)
+			{
+				std::cerr<<"Error: nodes within the loop should not be empty!"<<std::endl;
+				std::cerr<<"j="<<j<<std::endl;
+				std::cerr<<"size higherLevelNodes: "<<higherLevelNodes->size()<<std::endl;
+				std::cerr<<"size localLeaves: "<<localLeaves->size()<<std::endl;
+				continue;
+			}
 
 			for (std::set<GeoNode*>::iterator nodeIt = nodes->begin(); nodeIt
 					!= nodes->end(); nodeIt++)
 			{
 				GeoNode *node = (*nodeIt);
+				if(node->childrenDocids->size()==0)
+					continue;
+
 				double p =
 						node->getGenerationLikelihood(&gd, (j==0)?true:false);
 
 				//prior information
-				p = p + log(priors.find(node)->second);
+				//p = p + log(priors.find(node)->second);
 
 				if (p > maxLikelihood)
 				{

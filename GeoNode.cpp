@@ -15,13 +15,10 @@ lemur::extra::GeoNode::GeoNode(double lat, double lng, double latFromCenter,
 	latDegreesFromCenter = latFromCenter;
 	lngDegreesFromCenter = lngFromCenter;
 
-	docids = new std::vector<GeoDoc*>();//keep track of the docids stored in the current node
 	childrenDocids = new std::vector<GeoDoc*>();//keep track of the docids that are stored in the children
 	children = new std::vector<GeoNode*>();//keep track of the children
-	neighbours = new std::set<GeoNode*>;
 	parent = NULL;
 	geoDUC = NULL;
-	geoMLLM = NULL;
 	geoSmoothedLM = NULL;
 }
 
@@ -37,13 +34,10 @@ lemur::extra::GeoNode::GeoNode()
 	latDegreesFromCenter = 90.0;
 	lngDegreesFromCenter = 180.0;
 
-	docids = new std::vector<GeoDoc*>();//keep track of the docids stored in the current node
 	childrenDocids = new std::vector<GeoDoc*>();//keep track of the docids that are stored in the children
 	children = new std::vector<GeoNode*>();//keep track of the children
-	neighbours = new std::set<GeoNode*>;
 	parent = NULL;
 	geoDUC = NULL;
-	geoMLLM = NULL;
 }
 
 
@@ -61,12 +55,11 @@ void lemur::extra::GeoNode::addDocument(int docid)
  */
 void lemur::extra::GeoNode::addDocument(GeoDoc *gd)
 {
+	childrenDocids->push_back(gd);
+
 	//if the current node has children, this document needs to be pushed down the tree
 	if (children->size() > 0)
 	{
-		//store it in the special children aggregate vector
-		childrenDocids->push_back(gd);
-
 		//push it to the correct child ....
 		for (int i = 0; i < children->size(); i++)
 		{
@@ -77,14 +70,12 @@ void lemur::extra::GeoNode::addDocument(GeoDoc *gd)
 				return;
 			}
 		}
-		//error checking
 		std::cerr << "Could not find correct child for document with lat="<< gd->latitude << ", lng=" << gd->longitude << std::endl;
 		return;
 	}
 	//no children, must mean that the document should be added here ....
 	else
 	{
-		docids->push_back(gd);
 		splitNode();//check if a split is necessary
 		return;
 	}
@@ -96,17 +87,7 @@ void lemur::extra::GeoNode::addDocument(GeoDoc *gd)
  */
 bool lemur::extra::GeoNode::isGeoDocFitting(GeoDoc *gd)
 {
-	if (gd->latitude <= (latitudeCenter - latDegreesFromCenter))
-		return false;
-	if (gd->latitude >(latitudeCenter + latDegreesFromCenter))
-		return false;
-
-	if (gd->longitude <= (longitudeCenter - lngDegreesFromCenter))
-		return false;
-	if (gd->longitude > (longitudeCenter + lngDegreesFromCenter))
-		return false;
-
-	return true;
+	return isGeoDocFitting(gd->latitude, gd->longitude);
 }
 
 /**
@@ -141,78 +122,46 @@ lemur::extra::GeoNode* lemur::extra::GeoNode::getParent()
 }
 
 /**
- * returns the number of DIRECT children of a GeoNode;
- * should be either 0 or 4 (as the split is always into 4 sub-rectangles)
- */
-int lemur::extra::GeoNode::getNumChildren()
-{
-	return children->size();
-}
-
-/**
- * returns the total number of GeoDocs attached to the current node;
- * total here means that if the node is not a leaf, the leaf counts of all the nodes
- * direct and indirect children are accumulated;
- * note: this number should be the same as get docidsChildren->size()
- * (this method is kept as a control ...)
- */
-int lemur::extra::GeoNode::getTotalNumGeoDocs()
-{
-	if (docids->size() > 0)//leaf node
-		return docids->size();
-	else if (children->size() > 0)
-	{
-		//iterate over all children
-		int sum = 0;
-		for (int i = 0; i < children->size(); i++)
-			sum += children->at(i)->getTotalNumGeoDocs();
-		return sum;
-	}
-	else
-		return 0;
-}
-
-/**
  * returns the total number of leaf nodes of the current node;
  * total here means that if the node is not a leaf (in which case the count is 1),
  * the leaves of all direct and indirect children are accumulated
  */
 int lemur::extra::GeoNode::getTotalNumLeaves()
 {
-	if (docids->size() > 0)//leaf node
-		return 1;
-	else if (children->size() > 0)
-	{
-		//iterate over all children
-		int sum = 0;
-		for (int i = 0; i < children->size(); i++)
-			sum += children->at(i)->getTotalNumLeaves();
-		return sum;
-	}
+	int sum = 0;
+	_getTotalNumLeaves(sum);
+	return sum;
+}
+
+void lemur::extra::GeoNode::_getTotalNumLeaves(int& sum)
+{
+	if (children->size() == 0)//leaf node
+		sum +=1;
 	else
-		return 0;
+	{
+		for (int i = 0; i < children->size(); i++)
+			children->at(i)->_getTotalNumLeaves(sum);
+	}
 }
 
 /**
  * in order to not traverse the tree each time, we check the leaves, this method
  * fills the set given as input with all the leaves that are under the current node
- * (usually called from the root node)
  */
 void lemur::extra::GeoNode::fillSetWithLeaves(std::set<GeoNode*> *nodeSet)
 {
-	if (docids->size() > 0)//non-empty leaf node
+	if (children->size() == 0)
 	{
-		nodeSet->insert(this);
+		if(childrenDocids->size()>0)
+			nodeSet->insert(this);
 		return;
 	}
-	else if (children->size() > 0)
+	else
 	{
 		//iterate over all children
 		for (int i = 0; i < children->size(); i++)
 			children->at(i)->fillSetWithLeaves(nodeSet);
 	}
-	else
-		return;
 }
 
 
@@ -222,8 +171,8 @@ void lemur::extra::GeoNode::fillSetWithLeaves(std::set<GeoNode*> *nodeSet)
  */
 void lemur::extra::GeoNode::fillSetWithNodesAtLevel(std::set<GeoNode*> *nodeSet, int level)
 {
-	//either achieved the wanted level or this is the final node (leave)
-	if( level == 0 || docids->size()>0 )
+	//either achieved the wanted level or this is a leave or it has less than X documents
+	if( level == 0 || children->size()==0)
 	{
 		nodeSet->insert(this);
 		return;
@@ -236,15 +185,6 @@ void lemur::extra::GeoNode::fillSetWithNodesAtLevel(std::set<GeoNode*> *nodeSet,
 	}
 }
 
-/**
- * when a document passes "through" a node to its children, it is still kept as
- * a record at the node; thus, this method returns all documents in the form of
- * GeoDoc pointers that have passed through the current node
- */
-std::vector<lemur::extra::GeoDoc*>* lemur::extra::GeoNode::getDocidsInChildren()
-{
-	return childrenDocids;
-}
 
 /**
  * if a document is added to a leaf node, a split of the leaf node (leaf node becomes internal
@@ -257,7 +197,7 @@ std::vector<lemur::extra::GeoDoc*>* lemur::extra::GeoNode::getDocidsInChildren()
 void lemur::extra::GeoNode::splitNode()//split the node if necessary
 {
 	//only split if the number #docid is reached and the degrees to split are more than the minimum
-	if (docids->size() <= ps->GN_SPLIT_NUM || latDegreesFromCenter
+	if ( childrenDocids->size() <= ps->GN_SPLIT_NUM || latDegreesFromCenter
 			<= ps->GN_MIN_LATITUDE_STEP || lngDegreesFromCenter <= ps->GN_MIN_LONGITUDE_STEP)
 	{
 		return;
@@ -293,9 +233,9 @@ void lemur::extra::GeoNode::splitNode()//split the node if necessary
 	children->push_back(southWest);
 
 	//distribute the docids to the children
-	for (int i = 0; i < docids->size(); i++)
+	for (int i = 0; i < childrenDocids->size(); i++)
 	{
-		GeoDoc *gd = docids->at(i);
+		GeoDoc *gd = childrenDocids->at(i);
 
 		if (northWest->isGeoDocFitting(gd) == true)
 			northWest->addDocument(gd);
@@ -310,9 +250,6 @@ void lemur::extra::GeoNode::splitNode()//split the node if necessary
 			std::cerr << "Cannot assign GeoDoc to any child!";
 			return;
 		}
-
-		//the docids are now in the childrenDocids vector of the new internal node
-		childrenDocids->push_back(gd);
 	}
 
 	//do splitting until no child needs further splitting ....
@@ -320,84 +257,7 @@ void lemur::extra::GeoNode::splitNode()//split the node if necessary
 	northEast->splitNode();
 	southEast->splitNode();
 	southWest->splitNode();
-
-	//don't forget to clear the docids from the now parent node
-	docids->clear();
 }
-
-/**
- * takes a termid as input and returns the maximum likelihood probability
- * of the term given the LM made from the current node;
- * if the node is a leaf node, all its documents are used; if it is an internal
- * node, all documents of its children are used;
- *
- * it can also happen, that none of the documents in the current GeoNode have any tags
- * associated with them; in this case, the returned probability is MINUS ONE!!
- */
-double lemur::extra::GeoNode::getMLTermProb(int termid)
-{
-	if(termid<=0)
-		return -1;
-
-	if(geoDUC==0)
-	{
-		std::vector<int> docidVec;
-		std::vector<GeoDoc*> *pointer;
-		if(docids->size()>0)
-			pointer = docids;
-		else
-			pointer = childrenDocids;
-
-		for(int i=0; i<pointer->size(); i++)
-			docidVec.push_back(pointer->at(i)->docid);
-
-		geoDUC = new lemur::langmod::DocUnigramCounter(docidVec,*(ps->ind));
-	}
-	if(geoMLLM==0)
-	{
-		geoMLLM = new lemur::langmod::MLUnigramLM(*geoDUC,ps->ind->termLexiconID());
-	}
-
-	if( geoDUC->sum()<=0.0 )
-		return -1.0;
-
-	double p = geoMLLM->prob(termid);
-	if(isnan(p))
-	{
-		std::cerr<<"Error: p=NaN within getMLTermProb"<<std::endl;
-		exit(1);
-	}
-	return p;
-}
-
-
-/**
- * takes a termid as input and returns the termcount in the ML model made from all documents
- * below this node
- */
-int lemur::extra::GeoNode::getMLTermCount(int termid)
-{
-	if(termid<=0)
-		return 0;
-
-	if(geoDUC==0)
-	{
-		std::vector<int> docidVec;
-		std::vector<GeoDoc*> *pointer;
-		if(docids->size()>0)
-			pointer = docids;
-		else
-			pointer = childrenDocids;
-
-		for(int i=0; i<pointer->size(); i++)
-			docidVec.push_back(pointer->at(i)->docid);
-
-		geoDUC = new lemur::langmod::DocUnigramCounter(docidVec,*(ps->ind));
-	}
-	return geoDUC->count(termid);
-}
-
-
 
 
 /**
@@ -422,9 +282,9 @@ double lemur::extra::GeoNode::getGenerationLikelihood(lemur::extra::GeoDoc *gd,b
 	else
 	{
 		std::vector<int> docidVec;
-		std::vector<GeoDoc*> *pointer = (docids->size()>0) ? docids : childrenDocids;
-		for(int i=0; i<pointer->size(); i++)
-			docidVec.push_back(pointer->at(i)->docid);
+
+		for(int i=0; i<childrenDocids->size(); i++)
+			docidVec.push_back(childrenDocids->at(i)->docid);
 
 		counter = new lemur::langmod::DocUnigramCounter(docidVec,*(ps->ind));
 		lm = new lemur::langmod::DirichletUnigramLM(*counter, ps->ind->termLexiconID(),*(ps->colLM), ps->smoothingParam);
@@ -494,8 +354,8 @@ lemur::extra::GeoDoc* lemur::extra::GeoNode::getNearestNeighbour(GeoDoc *gd)
 
 	std::map<int,GeoDoc*> dSet;
 
-	for (int i = 0; i < docids->size(); i++)
-		dSet.insert(std::make_pair(docids->at(i)->docid, docids->at(i)));
+	for (int i = 0; i < childrenDocids->size(); i++)
+		dSet.insert(std::make_pair(childrenDocids->at(i)->docid, childrenDocids->at(i)));
 
 	lemur::api::TermInfoList *tlist = ps->ind->termInfoList(gd->docid);
 	tlist->startIteration();
@@ -561,7 +421,7 @@ lemur::extra::GeoDoc* lemur::extra::GeoNode::getNearestNeighbour(GeoDoc *gd)
 	{
 		std::cerr<<"Error: maxIndex="<<maxDocid<<std::endl;
 		std::cerr<<"returning first document ...."<<std::endl;
-		return docids->at(0);
+		return childrenDocids->at(0);
 	}
 	return dSet.find(maxDocid)->second;
 }

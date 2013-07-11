@@ -29,10 +29,7 @@ class GeoNode
 		std::vector<GeoNode*> *children;//store in here the children nodes
 		GeoNode *parent;//store hte parent node
 
-		//DocUnigramCounter of all children nodes or if leaf, all docids of the leaf
 		lemur::langmod::DocUnigramCounter *geoDUC;
-		//maximum likelihood language model based on geoDUC
-		lemur::langmod::MLUnigramLM *geoMLLM;
 		lemur::langmod::UnigramLM *geoSmoothedLM;
 		lemur::extra::ParameterSingleton *ps;
 
@@ -42,7 +39,6 @@ class GeoNode
 		double latDegreesFromCenter;
 		double lngDegreesFromCenter;
 
-		std::vector<GeoDoc*> *docids;//store in here the documents (if leaf)
 		std::vector<GeoDoc*> *childrenDocids;//aggregate here the documents of the children
 
 		GeoNode(double lat, double lng, double latFromCenter, double lngFromCenter);
@@ -53,21 +49,17 @@ class GeoNode
 		bool isGeoDocFitting(double lat, double lng);
 		void setParent(GeoNode *p);
 		GeoNode* getParent();
-		std::vector<GeoDoc*>* getDocidsInChildren();
-		int getNumChildren();
-		int getTotalNumGeoDocs();
+
 		int getTotalNumLeaves();
+		void _getTotalNumLeaves(int& sum);
+
 		void fillSetWithLeaves(std::set<GeoNode*> *nodeSet);
 		void fillSetWithNodesAtLevel(std::set<GeoNode*> *nodeSet, int level);
+
 		void splitNode();
-		double getSizeOfArea();
+
 		double getGenerationLikelihood(lemur::extra::GeoDoc *gd, bool higherLevelType);
 		GeoDoc* getNearestNeighbour(GeoDoc *gd);
-
-		double getMLTermProb(int termid);
-		int getMLTermCount(int termid);
-
-		std::set<GeoNode*> *neighbours;
 };
 
 	}}
