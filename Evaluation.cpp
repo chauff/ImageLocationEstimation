@@ -31,14 +31,13 @@ lemur::extra::Evaluation::Evaluation()
 		int docid = ps->ind->document(sDocid);
 		if(docid<=0)
 			continue;
-		TestItem *ti = new TestItem;
-		ti->docid=docid;
+		TestItem *ti = new TestItem(docid);
 		ti->latitude=latitude;
 		ti->longitude=longitude;
 		ti->user = lemur::extra::Metadata::getUser(docid);
 		std::string stime = lemur::extra::Metadata::getTimeTaken(docid);
-		ti->monthTaken = lemur::extra::Metadata::getMonth(stime);
-		ti->yearTaken = lemur::extra::Metadata::getYear(stime);
+		ti->takenInMonth = lemur::extra::Metadata::getMonth(stime);
+		ti->takenInYear = lemur::extra::Metadata::getYear(stime);
 		testMap->insert(std::make_pair(docid,ti));
 	}
 }

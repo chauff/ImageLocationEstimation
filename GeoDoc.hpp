@@ -1,23 +1,14 @@
 #ifndef GEODOC_HPP_
 #define GEODOC_HPP_
 
-#include "IndexManager.hpp"
-#include "common_headers.hpp"
-#include "BasicDocStream.hpp"
-#include "RetMethodManager.hpp"
-#include "ResultFile.hpp"
-#include "RelDocUnigramCounter.hpp"
-#include "indri/Repository.hpp"
-#include "indri/QueryEnvironment.hpp"
-#include "GeoNode.hpp"
-#include "Distance.hpp"
-#include "Evaluation.hpp"
-#include "TermDistributionFilter.hpp"
+#include <map>
 #include "ParameterSingleton.hpp"
 #include "Metadata.hpp"
+#include "TermDistributionFilter.hpp"
 
 namespace lemur{
 	namespace extra{
+
 
 class GeoDoc
 {

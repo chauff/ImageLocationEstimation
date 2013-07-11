@@ -1,24 +1,18 @@
 #ifndef GEONODE_HPP_
 #define GEONODE_HPP_
 
-#include "common_headers.hpp"
-#include "indri/Repository.hpp"
-#include "IndexManager.hpp"
-#include "UnigramLM.hpp"
-#include "DocUnigramCounter.hpp"
-#include "GeoDoc.hpp"
-#include "TermDistributionFilter.hpp"
-#include "Distance.hpp"
-#include <math.h>
-#include <set>
 #include <vector>
+#include "DocUnigramCounter.hpp"
+#include "UnigramLM.hpp"
 #include "ParameterSingleton.hpp"
+#include "GeoDoc.hpp"
+#include "math.h"
 
 
 namespace lemur{
 	namespace extra{
 
-class GeoDoc;
+//class GeoDoc;
 
 class GeoNode
 {

@@ -1,20 +1,16 @@
 #ifndef EVALUATION_HPP_
 #define EVALUATION_HPP_
 
-#include "common_headers.hpp"
-#include "indri/Repository.hpp"
-#include "indri/QueryEnvironment.hpp"
-#include "TermDistributionFilter.hpp"
+#include <vector>
+#include <set>
+#include <map>
+#include <sstream>
 #include "TestItem.hpp"
-#include "Metadata.hpp"
-#include "ParameterSingleton.hpp"
 
 namespace lemur
 {
 	namespace extra
 	{
-		class ParameterSingleton;
-
 		class Evaluation
 		{
 			public:

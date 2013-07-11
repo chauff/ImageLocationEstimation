@@ -1,25 +1,18 @@
 #ifndef TESTITEM_HPP_
 #define TESTITEM_HPP_
 
+#include "GeoDoc.hpp"
+
 namespace lemur
 {
 	namespace extra
 	{
-		class TestItem
+		class TestItem : public GeoDoc
 		{
-			public:
-				TestItem()
-				{
-					distToGroundTruth=-1.0;
-				};
-
-				int docid;
-				double latitude;
-				double longitude;
-				int monthTaken;
-				int yearTaken;
-				double distToGroundTruth;
-				std::string user;
+		public:
+			TestItem(int did);
+			double distToGroundTruth;
+			std::string user;
 		};
 	}
 }

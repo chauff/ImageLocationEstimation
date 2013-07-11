@@ -1,11 +1,10 @@
 #ifndef METADATA_HPP_
 #define METADATA_HPP_
 
-#include "common_headers.hpp"
-#include "indri/Repository.hpp"
-#include "indri/QueryEnvironment.hpp"
-#include "TermDistributionFilter.hpp"
-#include "TestItem.hpp"
+#include <string>
+#include <vector>
+#include <set>
+#include "ParameterSingleton.hpp"
 
 namespace lemur
 {

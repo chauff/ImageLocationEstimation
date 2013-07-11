@@ -1,14 +1,10 @@
 #ifndef PARAMETERSINGLETON_HPP_
 #define PARAMETERSINGLETON_HPP_
 
-#include "IndexManager.hpp"
-#include "common_headers.hpp"
-#include "BasicDocStream.hpp"
-#include "RetMethodManager.hpp"
-#include "RelDocUnigramCounter.hpp"
 #include "indri/Repository.hpp"
 #include "indri/QueryEnvironment.hpp"
-#include "GeoNode.hpp"
+#include "IndexManager.hpp"
+#include "UnigramLM.hpp"
 
 
 namespace lemur

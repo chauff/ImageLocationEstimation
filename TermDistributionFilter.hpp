@@ -1,12 +1,10 @@
 #ifndef TERMDISTRIBUTIONFILTER_HPP_
 #define TERMDISTRIBUTIONFILTER_HPP_
 
-#include <set>
-#include "GeoDoc.hpp"
-#include "GeoNode.hpp"
-#include "Evaluation.hpp"
-#include "Metadata.hpp"
+#include <map>
 #include "ParameterSingleton.hpp"
+#include "Metadata.hpp"
+#include "math.h"
 
 namespace lemur
 {

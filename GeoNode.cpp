@@ -172,7 +172,7 @@ void lemur::extra::GeoNode::fillSetWithLeaves(std::set<GeoNode*> *nodeSet)
 void lemur::extra::GeoNode::fillSetWithNodesAtLevel(std::set<GeoNode*> *nodeSet, int level)
 {
 	//either achieved the wanted level or this is a leave or it has less than X documents
-	if( level == 0 || children->size()==0)
+	if( level == 0 || children->size()==0 || childrenDocids->size()<ps->GN_SPLIT_NUM)
 	{
 		nodeSet->insert(this);
 		return;
@@ -269,7 +269,7 @@ void lemur::extra::GeoNode::splitNode()//split the node if necessary
  *
  * the smoothing parameter determines which smoothing method is chosen: JM if smoothingParam<1, Dirichlet smoothing otherwise
  */
-double lemur::extra::GeoNode::getGenerationLikelihood(lemur::extra::GeoDoc *gd,bool storeInClassVar)
+double lemur::extra::GeoNode::getGenerationLikelihood(lemur::extra::GeoDoc *gd, bool storeInClassVar)
 {
 	lemur::langmod::DocUnigramCounter *counter = NULL;
 	lemur::langmod::UnigramLM *lm = NULL;

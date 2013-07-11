@@ -2,8 +2,10 @@
 #define DISTANCE_HPP_
 
 #include <math.h>
+#include <iostream>
 
 #define _pi 3.14159265358979323846
+
 
 
 namespace lemur

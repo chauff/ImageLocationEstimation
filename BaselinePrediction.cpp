@@ -6,22 +6,19 @@
 #include "RelDocUnigramCounter.hpp"
 #include "indri/Repository.hpp"
 #include "indri/QueryEnvironment.hpp"
-#include "GeoNode.hpp"
-#include "GeoDoc.hpp"
-#include "Distance.hpp"
-#include "Evaluation.hpp"
-#include "ParameterSingleton.hpp"
 #include <time.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <string>       // std::string
 #include <iostream>     // std::cout
 #include <sstream>      // std::stringstream
-/*
- * This program is the main entry point for LocationEstimation
- */
+#include "ParameterSingleton.hpp"
+#include "Evaluation.hpp"
+#include "Metadata.hpp"
+#include "TermDistributionFilter.hpp"
+#include "GeoNode.hpp"
+#include "TestItem.hpp"
 
-//TODO: priors won't work (due to the higher level setup!)
 
 using namespace lemur::api;
 using namespace lemur::retrieval;
@@ -268,10 +265,10 @@ int AppMain(int argc, char* argv[])
 		if(ps->testDataInMonth>0 || ps->testDataInYear)
 		{
 			TestItem *ti = eval.getTestItem(docid);
-			if(ps->testDataInMonth>0 && ti->monthTaken!=ps->testDataInMonth)
+			if(ps->testDataInMonth>0 && ti->takenInMonth!=ps->testDataInMonth)
 				continue;
 
-			if(ps->testDataInYear>0 && ti->yearTaken!=ps->testDataInYear)
+			if(ps->testDataInYear>0 && ti->takenInYear!=ps->testDataInYear)
 				continue;
 		}
 
