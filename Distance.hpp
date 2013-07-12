@@ -6,13 +6,10 @@
 
 #define _pi 3.14159265358979323846
 
-
-
 namespace lemur
 {
 		namespace extra
 		{
-
 			class Distance
 			{
 				public:

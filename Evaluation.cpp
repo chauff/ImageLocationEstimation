@@ -15,7 +15,7 @@ lemur::extra::Evaluation::Evaluation()
 
 	//read test data
 	ifstream in(ps->testFile.c_str());
-	std::cerr<<"Trying to open "<<ps->testFile<<std::endl;
+	std::cerr<<"Reading test data from "<<ps->testFile<<std::endl;
 	if(in.is_open()==false)
 	{
 		std::cerr<<"Cannot read test file!"<<std::endl;
