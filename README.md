@@ -5,9 +5,9 @@ This source code has been used for various experiments in image location estimat
 The code has been implemented on top of the [Lemur Toolkit for Information Retrieval](http://sourceforge.net/projects/lemur/)
 and requires it to be installed.
 
-Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/MediaEval2011). 
+Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/hauff/ImageLocationEstimation/tree/master/MediaEval2011). 
 
-For an easy start, the provided [toy example](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
+For an easy start, the provided [toy example](https://github.com/chauff/ImageLocationEstimation/tree/master/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
 
 Publications
 ------------
