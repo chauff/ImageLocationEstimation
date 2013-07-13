@@ -1,7 +1,7 @@
 Toy example
 ===========
 
-The folder corpus contains 6 items - four in file `docsA.txt` and two in `docsB.txt`. We will use docsA for training and docsB for testing. Note that there is no need to keep training and test data in separate files; they are indexed together.
+The folder `corpus` contains 6 items - four in file `docsA.txt` and two in `docsB.txt`. We will use docsA for training and docsB for testing. Note that there is no need to keep training and test data in separate files; they are indexed together.
 
 Indexing
 --------
