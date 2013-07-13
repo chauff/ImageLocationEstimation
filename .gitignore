@@ -2,6 +2,7 @@
 *.o
 .*.swp
 corpus
+index
 param
 bin
 Makefile.app

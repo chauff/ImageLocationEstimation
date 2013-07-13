@@ -74,7 +74,7 @@ Accuracy 10KM: 50% 1/2
 Accuracy 50KM: 50% 1/2
 Accuracy 100KM: 50% 1/2
 Accuracy 1000KM: 50% 1/2
-Median error in KM: -1
+Median error in KM: 2906.48
 (size of distVec: 2)
 ```
  

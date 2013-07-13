@@ -178,7 +178,7 @@ std::string lemur::extra::Evaluation::printStatistics()
 	{
 		int medianIndex1 = (distVec.size())/2;
 		int medianIndex2 = medianIndex1-1;
-		if(medianIndex1>0 && medianIndex2>0)
+		if(medianIndex2>=0)
 			medianError = 0.5 * (distVec[medianIndex1]+distVec[medianIndex2]);
 	}
 

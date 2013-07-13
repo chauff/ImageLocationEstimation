@@ -39,7 +39,7 @@ Accuracy 10KM: 50% 1/2
 Accuracy 50KM: 50% 1/2
 Accuracy 100KM: 50% 1/2
 Accuracy 1000KM: 50% 1/2
-Median error in KM: -1
+Median error in KM: 2906.48
 (size of distVec: 2)
 
 4 gtLat:43.6426 gtLng:-79.3871 lat:43.7 lng:-79.4 dist:6.46819 sDocid:TEST1
