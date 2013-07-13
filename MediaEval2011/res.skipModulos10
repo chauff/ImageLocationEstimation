@@ -27,8 +27,8 @@ number of higher-level nodes: 186
 number of leaf nodes: 186
 number of test documents: 5336
 number of test documents with default location: 42
-[GEO-FILTER] number of unique terms in test documents: -
-[GEO-FILTER] number of unique terms above geo threshold (i.e. filtered out): -
+[GEO-FILTER] number of unique terms in test documents: -1
+[GEO-FILTER] number of unique terms above geo threshold (i.e. filtered out): -1
 
 
 Total number of test items: 5336

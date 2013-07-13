@@ -174,13 +174,13 @@ int AppMain(int argc, char* argv[]) {
 				if(acc<LocalParameter::minAccuracy)
 					continue;
 			}
-
 			trainingDocids.push_back(docid);
 			trainingSet->insert(docid);
 		}
 
 		delete users;
-		delete accuracies;
+		if(LocalParameter::minAccuracy>0)
+			delete accuracies;
 	}
 
 	std::cerr << "Training documents in total: " << trainingDocids.size()
@@ -426,7 +426,7 @@ int AppMain(int argc, char* argv[]) {
 				std::cerr << "estimated lat/lng: " << maxDoc->latitude << "/"
 						<< maxDoc->longitude << " error (km): " << errorDist
 						<< std::endl;
-				if (i % 10 == 0) {
+				if (i % 10 == 0 && i>0) {
 					eval.writeResultsToFile("");
 					eval.printStatistics();
 				}
@@ -436,6 +436,7 @@ int AppMain(int argc, char* argv[]) {
 
 	delete localLeaves;
 
+	std::cerr << std::endl;
 	std::cerr << "Evaluation finished!" << std::endl;
 
 	std::stringstream ssInfo;
@@ -458,14 +459,15 @@ int AppMain(int argc, char* argv[]) {
 		if ((*it).second > ps->geoTermThreshold)
 			numFiltered++;
 	}
-	ssInfo << "[GEO-FILTER] number of unique terms in test documents: " << ((LocalParameter::geoTermThreshold<=0)?"-":geoTerms->size())
+	int s = geoTerms->size();
+	ssInfo << "[GEO-FILTER] number of unique terms in test documents: "
+			<< ( (LocalParameter::geoTermThreshold<=0)?-1:s)
 			<< std::endl;
 	ssInfo
 			<< "[GEO-FILTER] number of unique terms above geo threshold (i.e. filtered out): "
-			<< ( (LocalParameter::geoTermThreshold<=0)?"-":numFiltered) << std::endl;
+			<< ( (LocalParameter::geoTermThreshold<=0)?-1:numFiltered) << std::endl;
 
 	eval.writeResultsToFile(ssInfo.str());
-	eval.printStatistics();
 
 	delete ind;
 }

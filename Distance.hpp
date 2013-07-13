@@ -31,7 +31,11 @@ namespace lemur
 					{
 						if(lat1>90||lat1<-90||lon1>180||lon1<-180||lat2>90||lat2<-90||lon2>180||lon2<-180)
 						{
-							std::cerr<<"getKM() expects latitude/longitude pairs!"<<std::endl;
+							std::cerr<<"getKM() expects valid latitude/longitude pairs!"<<std::endl;
+							std::cerr<<"-90<=latitude<=90 -180<=longitude<=180"<<std::endl;
+
+							std::cerr<<"lat1: "<<lat1<<", lat2: "<<lat2<<std::endl;
+							std::cerr<<"lon1: "<<lon1<<", lon2: "<<lon2<<std::endl;
 							exit(1);
 						}
 

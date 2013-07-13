@@ -1,0 +1,47 @@
+<parameters>
+<index>index</index>
+<resultFile>res.toy</resultFile>
+<smoothingParam>10</smoothingParam>
+<dirParamNN>10</dirParamNN>
+<splitLimit>1</splitLimit>
+<excludeTestUsers>false</excludeTestUsers>
+<minLongitudeStep>0.01</minLongitudeStep>
+<minLatitudeStep>0.01</minLatitudeStep>
+<testFile>toy_test</testFile>
+<geoTermThreshold>-1</geoTermThreshold>
+<generalUseTermFilter>-1</generalUseTermFilter>
+<defaultLatitude>0</defaultLatitude>
+<defaultLongitude>0</defaultLongitude>
+<priorFile>null</priorFile>
+<fields>tags title</fields>
+<alphas>0.9 0.1</alphas>
+<higherLevel>200</higherLevel>
+<skippingModulos>1</skippingModulos>
+</parameters>
+
+number of training documents: 3
+number of test users: 1
+number of higher-level nodes: 65
+number of leaf nodes: 65
+number of test documents: 2
+number of test documents with default location: 1
+[GEO-FILTER] number of unique terms in test documents: -1
+[GEO-FILTER] number of unique terms above geo threshold (i.e. filtered out): -1
+
+Total number of test items: 2
+Number of evaluated test items: 2
+++++ evaluation +++ 
+Accuracy 0.01KM: 0% 0/2
+Accuracy 0.05KM: 0% 0/2
+Accuracy 0.1KM: 0% 0/2
+Accuracy 1KM: 0% 0/2
+Accuracy 10KM: 50% 1/2
+Accuracy 50KM: 50% 1/2
+Accuracy 100KM: 50% 1/2
+Accuracy 1000KM: 50% 1/2
+Median error in KM: -1
+(size of distVec: 2)
+
+4 gtLat:43.6426 gtLng:-79.3871 lat:43.7 lng:-79.4 dist:6.46819 sDocid:TEST1
+5 gtLat:52.2042 gtLng:0.116667 lat:0 lng:0 dist:5806.49 sDocid:TEST2
+

@@ -1,0 +1,20 @@
+<parameters>
+<index>index</index>
+<resultFile>res.toy</resultFile>
+<smoothingParam>10</smoothingParam>
+<dirParamNN>10</dirParamNN>
+<splitLimit>1</splitLimit>
+<excludeTestUsers>false</excludeTestUsers>
+<minLongitudeStep>0.01</minLongitudeStep>
+<minLatitudeStep>0.01</minLatitudeStep>
+<testFile>toy_test</testFile>
+<geoTermThreshold>-1</geoTermThreshold>
+<generalUseTermFilter>-1</generalUseTermFilter>
+<defaultLatitude>0</defaultLatitude>
+<defaultLongitude>0</defaultLongitude>
+<priorFile>null</priorFile>
+<fields>tags title</fields>
+<alphas>0.9 0.1</alphas>
+<higherLevel>200</higherLevel>
+<skippingModulos>1</skippingModulos>
+</parameters>

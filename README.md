@@ -7,6 +7,7 @@ and requires it to be installed.
 
 Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/MediaEval2011). 
 
+For an easy start, the provided [toy example](http://www.multimediaeval.org/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
 
 Publications
 ------------
@@ -45,7 +46,7 @@ Creating an Index
 -----------------
 
 First, we need to create an inverted index, which creates a document for each region in the world. The "training data"
-for this task are images which contain geo-information (latitude/longitude) as well as textual metadata (their content.
+for this task are images which contain geo-information (latitude/longitude) as well as textual metadata.
 The location of the "test data" is to be estimated.
 
 The Lemur Toolkit requires the documents to be indexed to be provided in a particular XML-like format such as:
@@ -92,8 +93,7 @@ Once the data is in this format, indexing with the Lemur Toolkit is simply creat
  ```
 and then calling `IndriBuildIndex` (one of the apps of the Lemur Toolkit) with this file as only parameter. This creates an inverted index.
 
-Note that for the purposes of indexing, no difference is made between training and test data, both should be included
-in the folder imageCorpus and be indexed.
+Note that for the purposes of indexing, no difference is made between training and test data, both should be in the corpus and be indexed.
 
 Also note the difference between fields and metadata in the indexing process.
 
@@ -113,7 +113,7 @@ It requires as only input a parameter file:
 <excludeTestUsers>true</excludeTestUsers>
 <minLongitudeStep>0.01</minLongitudeStep>
 <minLatitudeStep>0.01</minLatitudeStep>
-<testFile>/home/hauff_data/LocationDetectionWeb/tmp</testFile>
+<testFile>/path/to/test_file</testFile>
 <geoTermThreshold>-1</geoTermThreshold>
 <generalUseTermFilter>-1</generalUseTermFilter>
 <defaultLatitude>0</defaultLatitude>

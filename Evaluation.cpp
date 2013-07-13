@@ -23,17 +23,16 @@ lemur::extra::Evaluation::Evaluation()
 	}
 
 	std::string sDocid = "";
-	double latitude = -1;
-	double longitude = -1;
 
-	while(in>>sDocid>>latitude>>longitude)
+	while(in>>sDocid)
 	{
 		int docid = ps->ind->document(sDocid);
 		if(docid<=0)
 			continue;
+
 		TestItem *ti = new TestItem(docid);
-		ti->latitude=latitude;
-		ti->longitude=longitude;
+		ti->latitude=atof(lemur::extra::Metadata::getLatitude(docid).c_str());
+		ti->longitude=atof(lemur::extra::Metadata::getLongitude(docid).c_str());;
 		ti->user = lemur::extra::Metadata::getUser(docid);
 		std::string stime = lemur::extra::Metadata::getTimeTaken(docid);
 		ti->takenInMonth = lemur::extra::Metadata::getMonth(stime);
@@ -207,7 +206,7 @@ void lemur::extra::Evaluation::writeResultsToFile(std::string additionalInfo="")
 	else
 	{
 		std::string line;
-		while(in>>line)
+		while (std::getline(in, line))
 		    out<<line<<std::endl;
 		in.close();
 	}
