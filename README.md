@@ -20,7 +20,7 @@ Getting Started
 To compile the code, clone the repository
 
 ```
-$ git clone git://github.com/charlotteHase/ImageLocationEstimation.git
+$ git clone git://github.com/chauff/ImageLocationEstimation.git
 ``` 
 
 and then adapt your local version of Lemur's `Makefile.app` (which was generated during the compilation of the Lemur Toolkit) by adapting
