@@ -7,6 +7,12 @@ and requires it to be installed.
 
 Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/MediaEval2011). 
 
+
+Publications
+------------
+Publications that made use of this code can be found on my [homepage](http://www.st.ewi.tudelft.nl/~hauff/). They include a [SIGIR'12 paper](http://www.st.ewi.tudelft.nl/~hauff/papers/SIGIR2012-hauff.pdf), an [ECIR'12 paper](http://www.st.ewi.tudelft.nl/~hauff/papers/ECIR2012-hauff.pdf) and [MediaEval Working Notes](http://ceur-ws.org/Vol-807/Hauff_WISTUD_Placing_me11wn.pdf).
+
+
 Getting Started
 ---------------
 
