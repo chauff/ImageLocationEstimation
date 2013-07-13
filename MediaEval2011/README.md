@@ -1,6 +1,6 @@
 MediaEval 2011 Runs
 ===================
-This folder contains the result files when running version v0.2 (GitHub tag) of the software on the MediaEval 2011 Placing Task data set.
+This folder contains the result files when running version v0.3 (GitHub tag) of the software on the MediaEval 2011 Placing Task data set.
 
 For these experiments, we used the `tags` and `title` information of each training/test item as well as the user's provided home location (if available) to place those test items that did not have any tag/title information associated with them.
 The code assumes that the user's home location is stored as metadata in the index and associated with the XML element `<USERLOCATION>`. This location data is taken as-is from the Flickr profile, i.e. a typical entry looks as follows: `<USERLOCATION>Los Angeles, USA, earth</USERLOCATION>`. These entries are parsed on the fly by the program.
