@@ -5,6 +5,7 @@ This source code has been used for various experiments in image location estimat
 The code has been implemented on top of the [Lemur Toolkit for Information Retrieval](http://sourceforge.net/projects/lemur/)
 and requires it to be installed.
 
+Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/MediaEval2011). 
 
 Getting Started
 ---------------
@@ -15,14 +16,14 @@ To compile the code, clone the repository
 $ git clone git://github.com/charlotteHase/ImageLocationEstimation.git
 ``` 
 
-and then adapt your local version of `Makefile.app` (which was generated during the compilation of the Lemur Toolkit) by adapting
+and then adapt your local version of Lemur's `Makefile.app` (which was generated during the compilation of the Lemur Toolkit) by adapting
 the OBJS and PROG lines:
 
 ```
 ## specify your object files here
-OBJS = BaselinePrediction.o Evaluation.o GeoDoc.o GeoNode.o TermDistributionFilter.o Metadata.o ParameterSingleton.o
+OBJS = PredictionRun.o TestItem.o Util.o Evaluation.o GeoDoc.o GeoNode.o TermDistributionFilter.o Metadata.o ParameterSingleton.o
 ## specify your program here
-PROG = bin/BaselinePrediction
+PROG = bin/PredictionRun
 ```
 
 Running:
@@ -31,7 +32,7 @@ Running:
 make -f Makefile.app
 ```
 
-will generate the executable `BaselinePrediction` in the bin folder.
+will generate the executable `PredictionRun`. It's only input is a parameter file which is explained in detail below.
 
 
 Creating an Index
@@ -50,7 +51,10 @@ The Lemur Toolkit requires the documents to be indexed to be provided in a parti
 <LATITUDE>-89.99999</LATITUDE>
 <USERID>10403985@N04</USERID>
 <TAGS>de azulooo desfiguraciones</TAGS>
+<TITLE>my holidays</TITLE>
 <TIMETAKEN>1212154760</TIMETAKEN>
+<USERLOCATION>Los Angeles, US, earth</USERLOCATION>
+<ACCURACY>6</ACCURACY>
 </DOC>
 ```
 
@@ -73,8 +77,11 @@ Once the data is in this format, indexing with the Lemur Toolkit is simply creat
 <forward>TIMETAKEN</forward>
 <forward>LONGITUDE</forward>
 <forward>LATITUDE</forward>
+<forward>ACCURACY</forward>
+<forward>USERLOCATION</forward>
 </metadata>
 <field><name>TAGS</name></field>
+<field><name>TITLE</name></field>
 </parameters>
  ```
 and then calling `IndriBuildIndex` (one of the apps of the Lemur Toolkit) with this file as only parameter. This creates an inverted index.
@@ -82,11 +89,12 @@ and then calling `IndriBuildIndex` (one of the apps of the Lemur Toolkit) with t
 Note that for the purposes of indexing, no difference is made between training and test data, both should be included
 in the folder imageCorpus and be indexed.
 
+Also note the difference between fields and metadata in the indexing process.
 
-Running BaselinePrediction
---------------------------
+Running PredictionRun
+---------------------
 
-Once the index has been created, the image location prediction program BaselinePrediction can be run.
+Once the index has been created, `PredictionRun` can be run.
 It requires as only input a parameter file:
 
 ```
@@ -109,8 +117,6 @@ It requires as only input a parameter file:
 <alphas>1</alphas>
 <higherLevel>7</higherLevel>
 <skippingModulos>25</skippingModulos>
-<testDataInMonth>-1</testDataInMonth>
-<geoFilterByMonth>-1</geoFilterByMonth>
 </parameters>
 ```
 
@@ -133,4 +139,5 @@ Instead of a valid filename, `<priorFile>POPULARITY</priorFile>` can be used, wh
 * `alphas`: this parameter entry has the same number of values as `fields`; it defines how the scores from the different fields should be interpolated. For the tags+titles example a valid entry would be `<alphas>0.7 0.3</alphas>` which gives a weight of 0.7 to the tags score and a weight of 0.3 to the titles score.
 * `higherLevel`: a parameter to speed up experiments; needs to be used with care, can lead to worse results; instead of directly evaluating all identified regions, a test image is first matched against higher-level nodes in the region tree and then only the sub-tree achieving the highest score is used further on
 * `skippingModulos`: we can index 100 million images or more; but if for experimental purposes less documents should be used in training, this parameter indicates which documents should be skipped, e.g. `<skippingModulos>10</skippingModulos>` means that only 1/10th of all available training data should be used
- 
+* `minAccuracy`: it is also possible to specify the accuracy level of the training data (as meta-data field during Lemur's indexing with `<ACCURACY>`) and only allow training data to enter the region models with at least the specified accuracy level
+* `useHomeLocation`: if set to `true`, the user's home location string will be used for location estimation if no text data is available for a test item. This of course only works if the home location is set for the test items (as metadata in the Lemur index with XML element `<USERLOCATION>`).  

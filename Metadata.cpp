@@ -18,6 +18,7 @@ int lemur::extra::Metadata::getYear(std::string stime)
 	return year;
 }
 
+
 std::string lemur::extra::Metadata::getUser(int docid)
 {
 	return get(docid, 1);
@@ -38,6 +39,16 @@ std::string lemur::extra::Metadata::getLongitude(int docid)
 	return get(docid, 4);
 }
 
+std::string lemur::extra::Metadata::getAccuracy(int docid)
+{
+	return get(docid, 5);
+}
+
+std::string lemur::extra::Metadata::getUserLocation(int docid)
+{
+	return get(docid, 6);
+}
+
 std::vector<std::string>* lemur::extra::Metadata::getUsers(std::vector<int>* docids)
 {
 	return get(docids, 1);
@@ -56,6 +67,11 @@ std::vector<std::string>* lemur::extra::Metadata::getLatitudes(std::vector<int>*
 std::vector<std::string>* lemur::extra::Metadata::getLongitudes(std::vector<int>* docids)
 {
 	return get(docids, 4);
+}
+
+std::vector<std::string>* lemur::extra::Metadata::getAccuracies(std::vector<int>* docids)
+{
+	return get(docids, 5);
 }
 
 std::set<std::string>* lemur::extra::Metadata::getUniqueUsers(std::vector<int>* docids)
@@ -82,6 +98,10 @@ std::string lemur::extra::Metadata::get(int docid, int type)
 		s = "latitude";
 	if(type==4)
 		s = "longitude";
+	if(type==5)
+		s = "acccuracy";
+	if(type==6)
+		s = "userlocation";
 
 	lemur::extra::ParameterSingleton *ps = lemur::extra::ParameterSingleton::getInstance();
 	std::vector<std::string> svec = ps->env->documentMetadata(tmp, s);
@@ -103,6 +123,10 @@ std::vector<std::string>* lemur::extra::Metadata::get(std::vector<int> *docids, 
 		s = "latitude";
 	if(type==4)
 		s = "longitude";
+	if(type==5)
+		s = "accuracy";
+	if(type==6)
+		s = "userlocation";
 
 	lemur::extra::ParameterSingleton *ps = lemur::extra::ParameterSingleton::getInstance();
 	std::vector<std::string> svec = ps->env->documentMetadata(*docids, s);

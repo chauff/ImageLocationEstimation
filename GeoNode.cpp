@@ -174,7 +174,8 @@ void lemur::extra::GeoNode::fillSetWithNodesAtLevel(std::set<GeoNode*> *nodeSet,
 	//either achieved the wanted level or this is a leave or it has less than X documents
 	if( level == 0 || children->size()==0 || childrenDocids->size()<ps->GN_SPLIT_NUM)
 	{
-		nodeSet->insert(this);
+		if(childrenDocids->size()>0)
+			nodeSet->insert(this);
 		return;
 	}
 	else

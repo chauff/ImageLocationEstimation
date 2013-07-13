@@ -117,7 +117,8 @@ std::map<int, int>* lemur::extra::GeoDoc::getTerms(std::string field)
 }
 
 /**
- * clear out the current terms, copy the ones in the given term set (for the oracle experiments only)
+ * clear out the current terms, copy the ones in the given term set (for the oracle experiments) or
+ * for instance if the home location should be used instead of the empty tags/title
  */
 void lemur::extra::GeoDoc::setTerms(std::string field, std::map<int, int> *manuallySetTerms)
 {
