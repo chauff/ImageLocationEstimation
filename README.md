@@ -7,7 +7,7 @@ and requires it to be installed.
 
 Since the code was first used for the Placing Task @ [MediaEval 2011](http://www.multimediaeval.org/mediaeval2011/), different runs on that dataset are also included here in the folder [MediaEval2011](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/MediaEval2011). 
 
-For an easy start, the provided [toy example](http://www.multimediaeval.org/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
+For an easy start, the provided [toy example](https://github.com/charlotteHase/ImageLocationEstimation/tree/master/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
 
 Publications
 ------------
