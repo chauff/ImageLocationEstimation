@@ -9,6 +9,9 @@ Since the code was first used for the Placing Task @ [MediaEval 2011](http://www
 
 For an easy start, the provided [toy example](https://github.com/chauff/ImageLocationEstimation/tree/master/ToyExample/) contains a step-by-step guid through the process with example input and parameter files.
 
+Please note that due to the size of the test data (up to hundreds of thousands of elements in current experiments), this code requires a large amount of memory to run efficiently. The memory requirements can be (somewhat) controlled through the `higherLevel` parameter.
+
+
 Publications
 ------------
 Publications that made use of this code can be found on my [homepage](http://www.st.ewi.tudelft.nl/~hauff/). They include a [SIGIR'12 paper](http://www.st.ewi.tudelft.nl/~hauff/papers/SIGIR2012-hauff.pdf), an [ECIR'12 paper](http://www.st.ewi.tudelft.nl/~hauff/papers/ECIR2012-hauff.pdf) and [MediaEval Working Notes](http://ceur-ws.org/Vol-807/Hauff_WISTUD_Placing_me11wn.pdf).
@@ -135,7 +138,7 @@ Meaning of the different parameters:
 * `splitLimit`: world regions are created dynamically, based on the training data. Once a region contains `splitLimit` images, it is split into 4 equally sized child regions
 * `excludeTestUsers`: if set to `true`, all images contributed by users that occur in the test data are not used in the training data; if it is set to `false`, test and training users are not split up
 * `minLongitudeStep`/`minLatitudeStep`: once a region has a longitude/latitude size less than these minima, no further splitting is performed (ensures that regions do not become too small)
-* `testFile`: the test file contains the test data in the form `docno latitude longitude` in each line; docno is the same value as provided in the indexing step, while latitude/longitude form the ground truth location
+* `testFile`: the test file contains the test data in the form of one `docno` per line - all specified ids need to exist in the index
 * `geoTermThreshold`: if 0 or negative no geo-filtering is conducted, otherwise for each term the geo-score is computed and terms are filtered out if their score is above the threshold
 * `generalUseTermFilter`: if 0 or negative this filter has no effect, otherwise terms are filtered out if they have not been used by at least the provided number of unique users
 * `defaultLatitude`/`defaultLongitude`: if no estimate of the location can be made (because no textual meta-data is available for a test image), the here defined location is the default location used instead (a common choice is either 0/0 or the location that occurs most often in the training data)
