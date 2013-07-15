@@ -4,7 +4,7 @@
 #include "Util.hpp"
 
 /*
- * the testfile is expected to be in the format <externalID> <latitude> <longitude>;
+ * the testfile is expected to be in the format <externalID>
  * if excludeTestUsers=true in the training data all items are ignored that are by users that contribute to the test set
  */
 
