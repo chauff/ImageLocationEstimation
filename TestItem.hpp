@@ -13,6 +13,8 @@ namespace lemur
 			TestItem(int did);
 			double distToGroundTruth;
 			std::string user;
+			double estimatedLatitude;
+			double estimatedLongitude;
 		};
 	}
 }

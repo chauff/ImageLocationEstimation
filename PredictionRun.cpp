@@ -304,8 +304,14 @@ int AppMain(int argc, char* argv[]) {
 	int numDefaultLocations = 0;
 	int numDocsTested = 0;
 
-	for (int i = 0; i < testDocids->size(); i++) {
+	for (int i = 0; i < testDocids->size(); i++)
+	{
 		int docid = testDocids->at(i);
+
+		//if the test item has been evaluated previously, skip over it
+		if(eval.isTestItem(docid)==false)
+			continue;
+
 		std::cerr << (i + 1) << ") evaluating docid=" << ind->document(docid)
 				<< std::endl;
 
@@ -320,6 +326,7 @@ int AppMain(int argc, char* argv[]) {
 		}
 
 		numDocsTested++;
+
 		GeoDoc gd(docid);
 
 		//first check, if there are actually terms in the test document

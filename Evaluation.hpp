@@ -30,6 +30,7 @@ namespace lemur
 				lemur::extra::ParameterSingleton *ps;
 				std::stringstream resultStream;
 				double getCoordinates(int docid, int type);
+				void readResultFile();
 		};
 	}
 }

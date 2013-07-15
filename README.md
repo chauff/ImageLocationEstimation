@@ -132,7 +132,7 @@ It requires as only input a parameter file:
 Meaning of the different parameters:
 
 * `index`: path to the index folder created in the previous step
-* `resultFile`: path to the file where the results (i.e. some meta-data and the estimated locations for the test data including the error distance with respect to the true location)
+* `resultFile`: path to the file where the results (i.e. some meta-data and the estimated locations for the test data including the error distance with respect to the true location); if the result file is not empty, the file is read, and the test items are skipped when running the program again (i.e. if the program crashes, you don't have to restart from scratch)
 * `smoothingParam`: Dirichlet-smoothed language modeling is used as retrieval approach; this is the `mu` parameter
 * `dirParamNN`: location estimation is a two step process: (1) the correct world region is identified and then, (2) the nearest neighbour to the test image in the found region is identified; this is the smoothing parameter of step (2)
 * `splitLimit`: world regions are created dynamically, based on the training data. Once a region contains `splitLimit` images, it is split into 4 equally sized child regions
