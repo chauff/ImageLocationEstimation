@@ -10,6 +10,7 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <string>
+#include <tr1/unordered_set>
 #include <iostream>
 #include <sstream>
 #include "ParameterSingleton.hpp"
@@ -43,10 +44,14 @@ std::string fields;//list of fields (e.g. TITLE, TWEETS, TAGS)
 std::string alphas;//list of alpha values (determines how to combine the fields)
 
 int higherLevel;//at what level of the hierarchy does the first iteration take place
-int skippingModulos;//instead of using everything for training, use %skippingModulos==0 documents
-
+int numTrainingItems;//instead of all available items, we can also randomly draw numTrainingItems from those
 int testDataInMonth;//only use test data of month X
 int testDataInYear;//only use test data of year y
+
+bool locNoise;//determines if noise should be added to latitude/longitude of training elements
+double locMean;//noise according to a normal distribution with this mean
+double locStdev;//noise according to a normal distribution with this stdev
+int locNoisePercentage;//percentage of training items that should be noisified
 
 int geoFilterByMonth;//geo-filter: only employ training data of month X
 int geoFilterByYear;//geo-filter: only employ training data of month Y
@@ -79,7 +84,12 @@ void get() {
 	ps->parseFields(ParamGetString("fields"));
 
 	ps->higherLevel = ParamGetInt("higherLevel", 5);
-	ps->skippingModulos = ParamGetInt("skippingModulos", 1);
+	ps->numTrainingItems = ParamGetInt("numTrainingItems", -1);
+	s = ParamGetString("locationNoise", "false");
+	ps->locNoise = (s.compare("false") ==0 ) ? false : true;
+	ps->locMean = ParamGetDouble("locationMean",0.0);
+	ps->locStdev = ParamGetDouble("locationStdev",0.0);
+	ps->locNoisePercentage = ParamGetInt("locationNoisePercentage",0);
 
 	ps->testDataInMonth = ParamGetInt("testDataInMonth", -1);
 	ps->testDataInYear = ParamGetInt("testDataInYear", -1);
@@ -157,10 +167,7 @@ int AppMain(int argc, char* argv[]) {
 		for (int i = 0; i < tmp.size(); i++) {
 			int docid = tmp[i];
 
-			//several conditions to check: skippingModulos, test item?, item by test user?
-			if (docid % ps->skippingModulos != 0)
-				continue;
-
+			//test item?, item by test user?
 			if (eval.isTestItem(docid))
 				continue;
 
@@ -181,6 +188,34 @@ int AppMain(int argc, char* argv[]) {
 		delete users;
 		if(LocalParameter::minAccuracy>0)
 			delete accuracies;
+	}
+
+	//if not all training items are wanted, remove some if necessary
+	if( ps->numTrainingItems > 0 && ( ps->numTrainingItems < trainingDocids.size()) ) {
+
+		//check RAND_MAX
+		if(RAND_MAX < trainingDocids.size()) {
+			std::cerr<<"Error: RAND_MAX not sufficiently large"<<std::endl;
+			exit;
+		}
+
+		std::tr1::unordered_set<int> s;
+		int minID = 0;
+		int maxID = 0;
+		for(int i=0; i<trainingDocids.size(); i++) {
+			s.insert(trainingDocids[i]);
+			if(trainingDocids[i]>maxID) {
+				maxID = trainingDocids[i];
+			}
+		}
+		while( s.size() > ps->numTrainingItems ) {
+			s.erase(rand()%maxID);
+		}
+
+		trainingDocids.clear();
+		for(std::tr1::unordered_set<int>::iterator it = s.begin(); it!=s.end(); it++) {
+			trainingDocids.push_back(*it);
+		}
 	}
 
 	std::cerr << "Training documents in total: " << trainingDocids.size()

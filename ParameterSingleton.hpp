@@ -47,7 +47,14 @@ namespace lemur
 				double defaultLatitude;
 				double defaultLongitude;
 				int higherLevel;
-				int skippingModulos;
+				int numTrainingItems;
+
+				//parameters to add noise to latitude/longitude
+				//mean and stdev are for the normal distribution
+				bool locNoise;
+				double locMean;
+				double locStdev;
+				int locNoisePercentage;
 
 				std::vector<double> GN_ALPHAS;
 				std::vector<std::string> GN_FIELDS;

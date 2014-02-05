@@ -44,7 +44,8 @@ lemur::extra::GeoNode::GeoNode()
 void lemur::extra::GeoNode::addDocument(int docid)
 {
 	//create the object and push it through the tree
-	GeoDoc *gd = new GeoDoc(docid);
+	//by definition we have a training item here, so add noise if set in the parameter settings
+	GeoDoc *gd = new GeoDoc(docid,true);
 	addDocument(gd);
 }
 

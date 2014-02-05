@@ -5,6 +5,8 @@
 #include "ParameterSingleton.hpp"
 #include "Metadata.hpp"
 #include "TermDistributionFilter.hpp"
+#include <cmath>
+#include "Random.hpp"
 
 namespace lemur{
 	namespace extra{
@@ -23,6 +25,7 @@ class GeoDoc
 		std::map<std::string, std::map<int,int>* > *fieldTerms;
 
 		GeoDoc(int did);
+		GeoDoc(int did, bool addNoise);
 		std::map<int, int>* getTerms(std::string field);
 
 		//for the oracle experiments, we also allow a manual change of the tags

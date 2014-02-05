@@ -1,6 +1,11 @@
 #include "GeoDoc.hpp"
 
-lemur::extra::GeoDoc::GeoDoc(int did)
+
+lemur::extra::GeoDoc::GeoDoc(int did) {
+	GeoDoc(did, false);
+}
+
+lemur::extra::GeoDoc::GeoDoc(int did, bool addNoise)
 {
 	ps = lemur::extra::ParameterSingleton::getInstance();
 	docid = did;
@@ -19,15 +24,32 @@ lemur::extra::GeoDoc::GeoDoc(int did)
 	latitude = atof(Metadata::getLatitude(docid).c_str());
 	longitude = atof(Metadata::getLongitude(docid).c_str());
 
-	if (latitude < -90 || latitude > 90)
-	{
-		std::cerr << "Error: out of bounds latitude: " << latitude << std::endl;
-		exit(1);
+	//add some noise here
+	//but only if this is a training item (addNoise is set to true)
+	//and only if the randomly generated numbers falls in the interval 0-(percentage-1)
+	if(ps->locNoise == true && addNoise == true && ( rand()%100 < ps->locNoisePercentage ) ) {
+
+		double d1, d2;
+		int attempts = 0;
+		do {
+			//the parameters mean/stdev only need to be set once across all calls,
+			//but for simplicity just added whenever the first call for an object is made
+			d1 = lemur::extra::Random::getInstance(ps->locMean,ps->locStdev)->getRandomNumber();
+		} while( fabs(latitude+d1) > 90 && attempts++ < 5);
+
+		do {
+			d2 = lemur::extra::Random::getInstance()->getRandomNumber();
+		} while( fabs(longitude+d2) > 180 && attempts++ < 10);
+
+		std::cerr<<"Adding noise to latitude/longitude"<<std::endl;
+		latitude += d1;
+		longitude += d2;
 	}
-	if (longitude < -180 || longitude > 180)
+
+	if ( abs(latitude)>90 || abs(longitude)>180)
 	{
-		std::cerr << "Error: out of bounds longitude: " << longitude
-				<< std::endl;
+		std::cerr << "Invalid latitude (max. +-90) or longitude (max. +-180): "<<latitude<<" / "<<longitude<<std::endl;
+		std::cerr << "Exiting program.";
 		exit(1);
 	}
 }
