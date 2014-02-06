@@ -1,7 +1,9 @@
 #ifndef RANDOM_HPP_
 #define RANDOM_HPP_
 
+#include <iostream>
 #include <random>
+#include "ParameterSingleton.hpp"
 
 namespace lemur
 {
@@ -11,6 +13,8 @@ namespace lemur
 		{
 			public:
 				double getRandomNumber();
+				void addKMToError(double km);
+				void printAverageError();
 				static Random* getInstance();
 				static Random* getInstance(double mean, double stdev);
 			private:
@@ -18,7 +22,11 @@ namespace lemur
 				std::default_random_engine* generator;
 				std::normal_distribution<double>* nd;
 				static Random* random;
-				Random();
+				Random(double m, double s);
+				lemur::extra::ParameterSingleton *ps;
+	
+				double numErroneousItems;
+				double sumErrors;
 		};
 	}
 }

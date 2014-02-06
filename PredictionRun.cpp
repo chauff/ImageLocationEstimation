@@ -1,3 +1,4 @@
+#include "Random.hpp"
 #include "IndexManager.hpp"
 #include "common_headers.hpp"
 #include "BasicDocStream.hpp"
@@ -190,6 +191,10 @@ int AppMain(int argc, char* argv[]) {
 			delete accuracies;
 	}
 
+	//static seeding of the pseudo-random number generator
+	//reason: when playing around with the size of the training data, larger corpora should always incorpora smaller ones
+	srand(10);
+	
 	//if not all training items are wanted, remove some if necessary
 	if( ps->numTrainingItems > 0 && ( ps->numTrainingItems < trainingDocids.size()) ) {
 
@@ -512,5 +517,7 @@ int AppMain(int argc, char* argv[]) {
 	eval.writeResultsToFile(ssInfo.str());
 
 	delete ind;
+
+	lemur::extra::Random::getInstance()->printAverageError();
 }
 

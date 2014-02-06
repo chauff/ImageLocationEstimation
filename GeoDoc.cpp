@@ -1,10 +1,5 @@
 #include "GeoDoc.hpp"
 
-
-lemur::extra::GeoDoc::GeoDoc(int did) {
-	GeoDoc(did, false);
-}
-
 lemur::extra::GeoDoc::GeoDoc(int did, bool addNoise)
 {
 	ps = lemur::extra::ParameterSingleton::getInstance();
@@ -41,7 +36,10 @@ lemur::extra::GeoDoc::GeoDoc(int did, bool addNoise)
 			d2 = lemur::extra::Random::getInstance()->getRandomNumber();
 		} while( fabs(longitude+d2) > 180 && attempts++ < 10);
 
-		std::cerr<<"Adding noise to latitude/longitude"<<std::endl;
+		
+		double errorInKM = lemur::extra::Distance::getKM(latitude, longitude, latitude+d1, longitude+d2);
+		lemur::extra::Random::getInstance()->addKMToError(errorInKM);
+
 		latitude += d1;
 		longitude += d2;
 	}
