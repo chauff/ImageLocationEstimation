@@ -150,7 +150,3 @@ Instead of a valid filename, `<priorFile>POPULARITY</priorFile>` can be used, wh
 * `skippingModulos`: we can index 100 million images or more; but if for experimental purposes less documents should be used in training, this parameter indicates which documents should be skipped, e.g. `<skippingModulos>10</skippingModulos>` means that only 1/10th of all available training data should be used
 * `minAccuracy`: it is also possible to specify the accuracy level of the training data (as meta-data field during Lemur's indexing with `<ACCURACY>`) and only allow training data to enter the region models with at least the specified accuracy level
 * `useHomeLocation`: if set to `true`, the user's home location string will be used for location estimation if no text data is available for a test item. This of course only works if the home location is set for the test items (as metadata in the Lemur index with XML element `<USERLOCATION>`).  
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/chauff/imagelocationestimation/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
