@@ -31,7 +31,7 @@ the OBJS and PROG lines:
 
 ```
 ## specify your object files here
-OBJS = PredictionRun.o TestItem.o Util.o Evaluation.o GeoDoc.o GeoNode.o TermDistributionFilter.o Metadata.o ParameterSingleton.o
+OBJS = PredictionRun.o TestItem.o Util.o Evaluation.o GeoDoc.o GeoNode.o TermDistributionFilter.o Metadata.o ParameterSingleton.o Random.o
 ## specify your program here
 PROG = bin/PredictionRun
 ```
@@ -124,8 +124,8 @@ It requires as only input a parameter file:
 <priorFile>null</priorFile>
 <fields>tags</fields>
 <alphas>1</alphas>
-<higherLevel>7</higherLevel>
-<skippingModulos>25</skippingModulos>
+<higherLevel>-1</higherLevel>
+<skippingModulos>-1</skippingModulos>
 </parameters>
 ```
 
